@@ -1,0 +1,262 @@
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: visible;
+
+  &.is-closing {
+    pointer-events: none;
+
+    .search-panel__field {
+      animation: field-out 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .search-panel__dropdown {
+      animation: dropdown-out 0.16s ease-in both;
+    }
+  }
+
+  &.is-mobile {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    width: 100%;
+    background: #fff;
+    overflow: auto;
+    animation: mobile-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    &.is-closing {
+      animation: mobile-out 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+
+      .search-panel__field,
+      .search-panel__dropdown {
+        animation: none;
+      }
+    }
+  }
+}
+
+.search-panel {
+  overflow: visible;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #2a3033;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+  }
+
+  &__field {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    animation: field-in 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  &__form {
+    display: block;
+    width: 100%;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin: 0;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 4px;
+    background: #fff;
+    color: #2a3033;
+    font: inherit;
+    font-size: 14px;
+    line-height: 40px;
+    outline: none;
+
+    &::placeholder {
+      color: #9aa1a6;
+    }
+
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button {
+      appearance: none;
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 228px;
+    z-index: 50;
+    padding: 16px 0;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.12),
+      0 8px 24px rgba(0, 0, 0, 0.14);
+    animation: dropdown-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  &__dropdown-grid {
+    display: grid;
+    grid-template-columns: minmax(140px, 200px) 1fr;
+    align-items: start;
+  }
+
+  &__history {
+    padding: 0 16px 0 20px;
+  }
+
+  &__filters {
+    padding: 0 20px 0 12px;
+  }
+
+  &--mobile {
+    .search-panel__top {
+      box-sizing: border-box;
+      height: 56px;
+      padding: 8px 12px 8px 4px;
+      background: #fff;
+    }
+
+    .search-panel__field {
+      animation: none;
+      border-radius: 20px;
+      background: #eff1f2;
+    }
+
+    .search-panel__input {
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 20px;
+      background: #eff1f2;
+      line-height: 40px;
+    }
+
+    .search-panel__dropdown {
+      position: static;
+      width: 100%;
+      min-height: 0;
+      margin: 0;
+      padding: 8px 16px 24px;
+      border-radius: 0;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .search-panel__dropdown-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .search-panel__filters {
+      padding: 0;
+    }
+  }
+}
+
+@keyframes field-in {
+  from {
+    opacity: 0.4;
+    clip-path: inset(0 0 0 100%);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes field-out {
+  from {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+
+  to {
+    opacity: 0;
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdown-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mobile-in {
+  from {
+    opacity: 0.6;
+    transform: translateX(40%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mobile-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(40%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host.is-mobile,
+  :host.is-mobile.is-closing,
+  .search-panel__field,
+  .search-panel__dropdown,
+  :host.is-closing .search-panel__field,
+  :host.is-closing .search-panel__dropdown {
+    animation: none !important;
+  }
+}

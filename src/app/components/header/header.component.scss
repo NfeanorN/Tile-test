@@ -1,0 +1,203 @@
+:host {
+  display: block;
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  overflow: visible;
+}
+
+.app-header {
+  width: 100%;
+  background: #1074cc;
+  color: #fff;
+  overflow: visible;
+
+  &__bar {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1440px;
+    height: 56px;
+    margin: 0 auto;
+    padding: 0 24px;
+    overflow: visible;
+  }
+
+  &__btn--menu {
+    display: none;
+  }
+
+  &__mobile-actions {
+    display: none;
+  }
+
+  &__desktop {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  &__logo {
+    flex-shrink: 0;
+    width: 150px;
+  }
+
+  &__slot {
+    position: relative;
+    flex: 0 0 auto;
+    overflow: visible;
+  }
+
+  &--search:not(&--mobile) &__slot {
+    padding-right: 40px;
+  }
+
+  &__nav--ghost {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &__search {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: block;
+    width: 100%;
+    height: 56px;
+    padding-top: 8px;
+    overflow: visible;
+  }
+
+  &__tools {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  &__aside {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  &__btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #cc1910;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  &__mobile-search {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+  }
+
+  &--mobile {
+    .app-header__bar {
+      padding: 0 8px 0 4px;
+    }
+
+    .app-header__btn--menu {
+      display: inline-flex;
+      flex-shrink: 0;
+    }
+
+    .app-header__desktop {
+      display: none;
+    }
+
+    .app-header__mobile-actions {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+  }
+
+  &--mobile.app-header--search {
+    background: #fff;
+    color: #2a3033;
+
+    .app-header__bar {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .app-header__bar {
+    padding: 0 8px 0 4px;
+  }
+
+  .app-header__btn--menu {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .app-header__desktop {
+    display: none;
+  }
+
+  .app-header__mobile-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .app-header--search {
+    background: #fff;
+    color: #2a3033;
+  }
+
+  .app-header--search .app-header__bar {
+    display: none;
+  }
+}

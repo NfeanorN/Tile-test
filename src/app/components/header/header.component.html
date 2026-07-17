@@ -1,0 +1,147 @@
+<header
+  class="app-header"
+  [class.app-header--search]="showSearchPanel"
+  [class.app-header--mobile]="isMobile"
+>
+  <div class="app-header__bar">
+    <button
+      type="button"
+      class="app-header__btn app-header__btn--menu"
+      aria-label="Меню"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z" />
+      </svg>
+    </button>
+
+    <div class="app-header__desktop">
+      <div class="app-header__logo"></div>
+
+      <div class="app-header__slot">
+        <app-nav-links
+          class="app-header__nav"
+          [class.app-header__nav--ghost]="showSearchPanel && !isMobile"
+          [attr.aria-hidden]="showSearchPanel && !isMobile"
+          [items]="navItems"
+          [activeId]="activeNavId"
+          (itemClick)="activeNavId = $event"
+        />
+
+        @if (showSearchPanel && !isMobile) {
+          <app-search-panel
+            class="app-header__search"
+            [query]="searchQuery"
+            [history]="history"
+            [filters]="filters"
+            [closing]="isSearchClosing"
+            [mobile]="false"
+            (queryChange)="searchQuery = $event"
+            (filtersChange)="onFiltersChange($event)"
+            (historySelect)="onHistorySelect($event)"
+            (submitSearch)="onSubmitSearch($event)"
+            (close)="closeSearch()"
+            (closeAnimationDone)="onSearchCloseAnimationDone()"
+          />
+        }
+      </div>
+
+      <div class="app-header__tools">
+        @if (!showSearchPanel) {
+          <button
+            type="button"
+            class="app-header__btn"
+            aria-label="Поиск"
+            (click)="openSearch()"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5Zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"
+              />
+            </svg>
+          </button>
+        }
+
+        <button type="button" class="app-header__btn" aria-label="Добавить">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8Zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4V7Z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="app-header__aside">
+        <button
+          type="button"
+          class="app-header__btn app-header__btn--notify"
+          aria-label="Уведомления"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2Zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Z"
+            />
+          </svg>
+          <span class="app-header__badge">{{ notificationCount }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="app-header__mobile-actions">
+      <button type="button" class="app-header__btn" aria-label="Добавить">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z" />
+        </svg>
+      </button>
+
+      <button type="button" class="app-header__btn" aria-label="История">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.95 8.95 0 0 0 13 21a9 9 0 0 0 0-18Zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12Z"
+          />
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        class="app-header__btn"
+        aria-label="Поиск"
+        (click)="openSearch()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5Zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"
+          />
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        class="app-header__btn"
+        aria-label="Уведомления"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2Zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (showSearchPanel && isMobile) {
+    <app-search-panel
+      class="app-header__mobile-search"
+      [query]="searchQuery"
+      [history]="history"
+      [filters]="filters"
+      [closing]="isSearchClosing"
+      [mobile]="true"
+      (queryChange)="searchQuery = $event"
+      (filtersChange)="onFiltersChange($event)"
+      (historySelect)="onHistorySelect($event)"
+      (submitSearch)="onSubmitSearch($event)"
+      (close)="closeSearch()"
+      (closeAnimationDone)="onSearchCloseAnimationDone()"
+    />
+  }
+</header>
