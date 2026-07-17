@@ -24,10 +24,6 @@
     overflow: visible;
   }
 
-  &__btn--menu {
-    display: none;
-  }
-
   &__mobile-actions {
     display: none;
   }
@@ -113,6 +109,10 @@
     &:focus-visible {
       outline: 2px solid #fff;
       outline-offset: 2px;
+    }
+
+    &--menu {
+      display: none;
     }
   }
 
