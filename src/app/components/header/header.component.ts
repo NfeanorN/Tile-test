@@ -11,8 +11,6 @@ import { SearchPanelComponent } from '../search-panel/search-panel.component';
 import { NAV_ITEMS, NavLinkItem } from '../../models/nav.models';
 import { DEFAULT_FILTERS, SearchFilters } from '../../models/search.models';
 
-const MOBILE_MQ = '(max-width: 767px)';
-
 @Component({
   selector: 'app-header',
   imports: [NavLinksComponent, SearchPanelComponent],
@@ -24,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public readonly navItems: NavLinkItem[] = NAV_ITEMS;
   public readonly notificationCount: number = 32;
 
-  public activeNavId: string = 'favorites';
+  public activeNavId: string = '';
   public isSearchOpen: boolean = false;
   public isSearchClosing: boolean = false;
   public isMobile: boolean = false;
@@ -38,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     'текстовое поле',
   ];
 
+  private readonly mobileMqQuery = '(max-width: 900px)';
   private closeFallbackId: ReturnType<typeof setTimeout> | null = null;
   private mobileMq?: MediaQueryList;
 
@@ -51,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.mobileMq = window.matchMedia(MOBILE_MQ);
+    this.mobileMq = window.matchMedia(this.mobileMqQuery);
     this.syncMobile(this.mobileMq.matches);
     this.mobileMq.addEventListener('change', this.onMobileChange);
   }

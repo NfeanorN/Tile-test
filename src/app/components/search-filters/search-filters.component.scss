@@ -52,13 +52,13 @@
 
   &__me {
     position: absolute;
-    top: 4px;
+    top: 6px;
     right: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border: 1px solid #e0e0e0;
     border-radius: 2px;
@@ -142,7 +142,7 @@
   }
 
   .search-filters__me {
-    top: 10px;
+    top: 12px;
     right: 8px;
   }
 

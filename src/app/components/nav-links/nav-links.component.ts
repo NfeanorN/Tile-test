@@ -9,6 +9,6 @@ import { NavLinkItem } from '../../models/nav.models';
 })
 export class NavLinksComponent {
   @Input({ required: true }) items: NavLinkItem[] = [];
-  @Input() activeId: string | null = 'favorites';
+  @Input() activeId: string | null = '';
   @Output() itemClick = new EventEmitter<string>();
 }
