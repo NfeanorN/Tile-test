@@ -1,13 +1,12 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
-  HostBinding,
   HostListener,
-  Input,
-  Output,
   ViewChild,
+  input,
+  output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SearchFilters } from '../../models/search.models';
@@ -20,43 +19,38 @@ import { SearchFiltersComponent } from '../search-filters/search-filters.compone
   imports: [FormsModule, SearchHistoryComponent, SearchFiltersComponent],
   templateUrl: './search-panel.component.html',
   styleUrl: './search-panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.is-closing]': 'closing()',
+    '[class.is-mobile]': 'mobile()',
+  },
 })
 export class SearchPanelComponent implements AfterViewInit {
-  @Input() query = '';
-  @Input({ required: true }) history: string[] = [];
-  @Input({ required: true }) filters!: SearchFilters;
-  @Input() dropdownOpen = true;
-  @Input() closing = false;
-  @Input() mobile = false;
+  readonly query = input('');
+  readonly history = input.required<string[]>();
+  readonly filters = input.required<SearchFilters>();
+  readonly dropdownOpen = input(true);
+  readonly closing = input(false);
+  readonly mobile = input(false);
 
-  @Output() queryChange = new EventEmitter<string>();
-  @Output() filtersChange = new EventEmitter<SearchFilters>();
-  @Output() historySelect = new EventEmitter<string>();
-  @Output() close = new EventEmitter<void>();
-  @Output() submitSearch = new EventEmitter<string>();
-  @Output() closeAnimationDone = new EventEmitter<void>();
+  readonly queryChange = output<string>();
+  readonly filtersChange = output<SearchFilters>();
+  readonly historySelect = output<string>();
+  readonly close = output<void>();
+  readonly submitSearch = output<string>();
+  readonly closeAnimationDone = output<void>();
 
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
-  @HostBinding('class.is-closing')
-  get isClosing(): boolean {
-    return this.closing;
-  }
-
-  @HostBinding('class.is-mobile')
-  get isMobileHost(): boolean {
-    return this.mobile;
-  }
-
   ngAfterViewInit(): void {
-    if (!this.closing) {
+    if (!this.closing()) {
       queueMicrotask(() => this.searchInput?.nativeElement.focus());
     }
   }
 
   @HostListener('animationend', ['$event'])
   onAnimationEnd(event: AnimationEvent): void {
-    if (!this.closing) {
+    if (!this.closing()) {
       return;
     }
 
@@ -68,14 +62,14 @@ export class SearchPanelComponent implements AfterViewInit {
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (!this.closing) {
+    if (!this.closing()) {
       this.close.emit();
     }
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
-    this.submitSearch.emit(this.query.trim());
+    this.submitSearch.emit(this.query().trim());
   }
 
   onHistorySelect(term: string): void {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({
@@ -7,5 +7,6 @@ import { HeaderComponent } from './components/header/header.component';
   styleUrl: './app.component.scss',
   standalone: true,
   imports: [HeaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}

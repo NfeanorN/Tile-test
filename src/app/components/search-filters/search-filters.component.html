@@ -5,7 +5,7 @@
       class="search-filters__author-input"
       type="text"
       placeholder="Имя или должность"
-      [ngModel]="filters.author"
+      [ngModel]="filters().author"
       (ngModelChange)="onAuthorChange($event)"
     />
     <button
@@ -23,7 +23,7 @@
     <label class="search-filters__check search-filters__check--participant">
       <input
         type="checkbox"
-        [checked]="filters.iAmParticipant"
+        [checked]="filters().iAmParticipant"
         (change)="toggle('iAmParticipant')"
       />
       <span class="search-filters__mark" aria-hidden="true">
@@ -37,7 +37,7 @@
       <span class="search-filters__label">Я участник</span>
     </label>
     <label class="search-filters__check search-filters__check--titles">
-      <input type="checkbox" [checked]="filters.inTitles" (change)="toggle('inTitles')" />
+      <input type="checkbox" [checked]="filters().inTitles" (change)="toggle('inTitles')" />
       <span class="search-filters__mark" aria-hidden="true">
         <svg viewBox="0 0 18 14" fill="none">
           <path
@@ -51,7 +51,7 @@
     <label class="search-filters__check search-filters__check--strict">
       <input
         type="checkbox"
-        [checked]="filters.strictSearch"
+        [checked]="filters().strictSearch"
         (change)="toggle('strictSearch')"
       />
       <span class="search-filters__mark" aria-hidden="true">
@@ -70,7 +70,7 @@
     <p class="search-filters__only-title">Только</p>
     <div class="search-filters__row">
       <label class="search-filters__check">
-        <input type="checkbox" [checked]="filters.onlyTags" (change)="toggle('onlyTags')" />
+        <input type="checkbox" [checked]="filters().onlyTags" (change)="toggle('onlyTags')" />
         <span class="search-filters__mark" aria-hidden="true">
           <svg viewBox="0 0 18 14" fill="none">
             <path
@@ -84,7 +84,7 @@
       <label class="search-filters__check">
         <input
           type="checkbox"
-          [checked]="filters.onlyRequests"
+          [checked]="filters().onlyRequests"
           (change)="toggle('onlyRequests')"
         />
         <span class="search-filters__mark" aria-hidden="true">
@@ -100,7 +100,7 @@
       <label class="search-filters__check">
         <input
           type="checkbox"
-          [checked]="filters.onlyContacts"
+          [checked]="filters().onlyContacts"
           (change)="toggle('onlyContacts')"
         />
         <span class="search-filters__mark" aria-hidden="true">

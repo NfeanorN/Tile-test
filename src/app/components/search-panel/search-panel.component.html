@@ -1,6 +1,6 @@
-<div class="search-panel" [class.search-panel--mobile]="mobile">
+<div class="search-panel" [class.search-panel--mobile]="mobile()">
   <div class="search-panel__top">
-    @if (mobile) {
+    @if (mobile()) {
       <button
         type="button"
         class="search-panel__back"
@@ -20,27 +20,27 @@
           class="search-panel__input"
           type="search"
           name="query"
-          [placeholder]="mobile ? 'Поиск' : 'Поисковый запрос'"
+          [placeholder]="mobile() ? 'Поиск' : 'Поисковый запрос'"
           autocomplete="off"
-          [ngModel]="query"
+          [ngModel]="query()"
           (ngModelChange)="queryChange.emit($event)"
         />
       </form>
     </div>
   </div>
 
-  @if (dropdownOpen) {
+  @if (dropdownOpen()) {
     <div class="search-panel__dropdown" role="dialog" aria-label="Параметры поиска">
       <div class="search-panel__dropdown-grid">
-        @if (!mobile) {
+        @if (!mobile()) {
           <div class="search-panel__history">
-            <app-search-history [items]="history" (select)="onHistorySelect($event)" />
+            <app-search-history [items]="history()" (select)="onHistorySelect($event)" />
           </div>
         }
         <div class="search-panel__filters">
           <app-search-filters
-            [filters]="filters"
-            [mobile]="mobile"
+            [filters]="filters()"
+            [mobile]="mobile()"
             (filtersChange)="filtersChange.emit($event)"
           />
         </div>

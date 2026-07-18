@@ -1,12 +1,18 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-search-history',
   templateUrl: './search-history.component.html',
   styleUrl: './search-history.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchHistoryComponent {
-  @Input({ required: true }) items: string[] = [];
-  @Output() select = new EventEmitter<string>();
+  readonly items = input.required<string[]>();
+  readonly select = output<string>();
 }

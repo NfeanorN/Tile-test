@@ -1,9 +1,9 @@
 <nav class="nav-links" aria-label="Основная навигация">
-  @for (item of items; track item.id) {
+  @for (item of items(); track item.id) {
     <a
       class="nav-links__item"
       href="#"
-      [class.nav-links__item--active]="item.id === activeId"
+      [class.nav-links__item--active]="item.id === activeId()"
       (click)="$event.preventDefault(); itemClick.emit(item.id)"
     >
       <span class="nav-links__icon" aria-hidden="true">

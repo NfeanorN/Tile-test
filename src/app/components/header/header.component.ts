@@ -1,10 +1,12 @@
 import {
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
+  computed,
+  signal,
 } from '@angular/core';
 import { NavLinksComponent } from '../nav-links/nav-links.component';
 import { SearchPanelComponent } from '../search-panel/search-panel.component';
@@ -17,37 +19,35 @@ import { DEFAULT_FILTERS, SearchFilters } from '../../models/search.models';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public readonly navItems: NavLinkItem[] = NAV_ITEMS;
-  public readonly notificationCount: number = 32;
+  public readonly notificationCount = 32;
 
-  public activeNavId: string = '';
-  public isSearchOpen: boolean = false;
-  public isSearchClosing: boolean = false;
-  public isMobile: boolean = false;
-  public searchQuery: string = '';
-  public filters: SearchFilters = { ...DEFAULT_FILTERS };
-  public history: string[] = [
+  public readonly activeNavId = signal('');
+  public readonly isSearchOpen = signal(false);
+  public readonly isSearchClosing = signal(false);
+  public readonly isMobile = signal(false);
+  public readonly searchQuery = signal('');
+  public readonly filters = signal<SearchFilters>({ ...DEFAULT_FILTERS });
+  public readonly history = signal([
     'закрепить теги',
     'кнопка',
     'приложение',
     'форма',
     'текстовое поле',
-  ];
+  ]);
+
+  public readonly showSearchPanel = computed(
+    () => this.isSearchOpen() || this.isSearchClosing(),
+  );
 
   private readonly mobileMqQuery = '(max-width: 900px)';
   private closeFallbackId: ReturnType<typeof setTimeout> | null = null;
   private mobileMq?: MediaQueryList;
 
-  constructor(
-    private readonly host: ElementRef<HTMLElement>,
-    private readonly cdr: ChangeDetectorRef,
-  ) {}
-
-  get showSearchPanel(): boolean {
-    return this.isSearchOpen || this.isSearchClosing;
-  }
+  constructor(private readonly host: ElementRef<HTMLElement>) {}
 
   ngOnInit(): void {
     this.mobileMq = window.matchMedia(this.mobileMqQuery);
@@ -62,17 +62,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openSearch(): void {
     this.clearCloseFallback();
-    this.isSearchClosing = false;
-    this.isSearchOpen = true;
+    this.isSearchClosing.set(false);
+    this.isSearchOpen.set(true);
   }
 
   closeSearch(): void {
-    if (!this.isSearchOpen || this.isSearchClosing) {
+    if (!this.isSearchOpen() || this.isSearchClosing()) {
       return;
     }
 
-    this.isSearchOpen = false;
-    this.isSearchClosing = true;
+    this.isSearchOpen.set(false);
+    this.isSearchClosing.set(true);
     this.clearCloseFallback();
     this.closeFallbackId = setTimeout(
       () => this.onSearchCloseAnimationDone(),
@@ -81,21 +81,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSearchCloseAnimationDone(): void {
-    if (!this.isSearchClosing) {
+    if (!this.isSearchClosing()) {
       return;
     }
 
     this.clearCloseFallback();
-    this.isSearchClosing = false;
-    this.searchQuery = '';
+    this.isSearchClosing.set(false);
+    this.searchQuery.set('');
   }
 
   onFiltersChange(filters: SearchFilters): void {
-    this.filters = filters;
+    this.filters.set(filters);
   }
 
   onHistorySelect(term: string): void {
-    this.searchQuery = term;
+    this.searchQuery.set(term);
   }
 
   onSubmitSearch(query: string): void {
@@ -103,16 +103,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.history.includes(query)) {
-      this.history = [query, ...this.history].slice(0, 8);
+    const history = this.history();
+    if (!history.includes(query)) {
+      this.history.set([query, ...history].slice(0, 8));
     }
 
-    console.log('Search:', { query, filters: this.filters });
+    console.log('Search:', { query, filters: this.filters() });
   }
 
   @HostListener('document:mousedown', ['$event'])
   onDocumentMouseDown(event: MouseEvent): void {
-    if (!this.isSearchOpen || this.isSearchClosing || this.isMobile) {
+    if (!this.isSearchOpen() || this.isSearchClosing() || this.isMobile()) {
       return;
     }
 
@@ -127,11 +128,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   };
 
   private syncMobile(matches: boolean): void {
-    this.isMobile = matches;
-    if (this.isMobile && this.isSearchClosing) {
+    this.isMobile.set(matches);
+    if (matches && this.isSearchClosing()) {
       this.onSearchCloseAnimationDone();
     }
-    this.cdr.markForCheck();
   }
 
   private clearCloseFallback(): void {

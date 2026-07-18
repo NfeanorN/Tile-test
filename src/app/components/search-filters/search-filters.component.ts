@@ -1,4 +1,9 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SearchFilters } from '../../models/search.models';
 
@@ -8,27 +13,27 @@ import { SearchFilters } from '../../models/search.models';
   styleUrl: './search-filters.component.scss',
   standalone: true,
   imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.is-mobile]': 'mobile()',
+  },
 })
 export class SearchFiltersComponent {
-  @Input({ required: true }) filters!: SearchFilters;
-  @Input() mobile = false;
-  @Output() filtersChange = new EventEmitter<SearchFilters>();
-
-  @HostBinding('class.is-mobile')
-  get isMobileHost(): boolean {
-    return this.mobile;
-  }
+  readonly filters = input.required<SearchFilters>();
+  readonly mobile = input(false);
+  readonly filtersChange = output<SearchFilters>();
 
   onAuthorChange(author: string): void {
-    this.emit({ ...this.filters, author });
+    this.emit({ ...this.filters(), author });
   }
 
   setMeAsAuthor(): void {
-    this.emit({ ...this.filters, author: 'Я' });
+    this.emit({ ...this.filters(), author: 'Я' });
   }
 
   toggle(key: keyof Omit<SearchFilters, 'author'>): void {
-    this.emit({ ...this.filters, [key]: !this.filters[key] });
+    const filters = this.filters();
+    this.emit({ ...filters, [key]: !filters[key] });
   }
 
   private emit(next: SearchFilters): void {

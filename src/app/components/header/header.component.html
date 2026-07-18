@@ -1,7 +1,7 @@
 <header
   class="app-header"
-  [class.app-header--search]="showSearchPanel"
-  [class.app-header--mobile]="isMobile"
+  [class.app-header--search]="showSearchPanel()"
+  [class.app-header--mobile]="isMobile()"
 >
   <div class="app-header__bar">
     <button
@@ -20,22 +20,22 @@
       <div class="app-header__slot">
         <app-nav-links
           class="app-header__nav"
-          [class.app-header__nav--ghost]="showSearchPanel && !isMobile"
-          [attr.aria-hidden]="showSearchPanel && !isMobile"
+          [class.app-header__nav--ghost]="showSearchPanel() && !isMobile()"
+          [attr.aria-hidden]="showSearchPanel() && !isMobile()"
           [items]="navItems"
-          [activeId]="activeNavId"
-          (itemClick)="activeNavId = $event"
+          [activeId]="activeNavId()"
+          (itemClick)="activeNavId.set($event)"
         />
 
-        @if (showSearchPanel && !isMobile) {
+        @if (showSearchPanel() && !isMobile()) {
           <app-search-panel
             class="app-header__search"
-            [query]="searchQuery"
-            [history]="history"
-            [filters]="filters"
-            [closing]="isSearchClosing"
+            [query]="searchQuery()"
+            [history]="history()"
+            [filters]="filters()"
+            [closing]="isSearchClosing()"
             [mobile]="false"
-            (queryChange)="searchQuery = $event"
+            (queryChange)="searchQuery.set($event)"
             (filtersChange)="onFiltersChange($event)"
             (historySelect)="onHistorySelect($event)"
             (submitSearch)="onSubmitSearch($event)"
@@ -46,7 +46,7 @@
       </div>
 
       <div class="app-header__tools">
-        @if (!showSearchPanel) {
+        @if (!showSearchPanel()) {
           <button
             type="button"
             class="app-header__btn"
@@ -134,15 +134,15 @@
     </div>
   </div>
 
-  @if (showSearchPanel && isMobile) {
+  @if (showSearchPanel() && isMobile()) {
     <app-search-panel
       class="app-header__mobile-search"
-      [query]="searchQuery"
-      [history]="history"
-      [filters]="filters"
-      [closing]="isSearchClosing"
+      [query]="searchQuery()"
+      [history]="history()"
+      [filters]="filters()"
+      [closing]="isSearchClosing()"
       [mobile]="true"
-      (queryChange)="searchQuery = $event"
+      (queryChange)="searchQuery.set($event)"
       (filtersChange)="onFiltersChange($event)"
       (historySelect)="onHistorySelect($event)"
       (submitSearch)="onSubmitSearch($event)"

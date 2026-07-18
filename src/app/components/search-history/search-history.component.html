@@ -1,7 +1,7 @@
 <div class="search-history">
   <h3 class="search-history__title">История</h3>
   <ul class="search-history__list">
-    @for (item of items; track item) {
+    @for (item of items(); track item) {
       <li>
         <button type="button" class="search-history__item" (click)="select.emit(item)">
           {{ item }}

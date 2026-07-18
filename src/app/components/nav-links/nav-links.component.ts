@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { NavLinkItem } from '../../models/nav.models';
 
 @Component({
@@ -6,9 +11,10 @@ import { NavLinkItem } from '../../models/nav.models';
   templateUrl: './nav-links.component.html',
   styleUrl: './nav-links.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavLinksComponent {
-  @Input({ required: true }) items: NavLinkItem[] = [];
-  @Input() activeId: string | null = '';
-  @Output() itemClick = new EventEmitter<string>();
+  readonly items = input.required<NavLinkItem[]>();
+  readonly activeId = input<string | null>('');
+  readonly itemClick = output<string>();
 }
